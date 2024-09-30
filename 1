@@ -1,0 +1,75 @@
+import art
+import random
+print(art.logo)
+cards_list = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+p_cards = []
+c_cards = []
+
+#include overarching while game_state = False
+
+def draw_card():
+    return random.choice(cards_list)
+
+def player_cards():
+    card1 = draw_card()
+    card2 = draw_card()
+    p_total = card1 + card2
+    p_cards.extend([card1,card2])
+    if p_total == 21:
+        print("Blackjack!")
+        return card1, card2, p_total
+    else:
+        print(f"Your cards: {p_cards}, current total: {p_total}")
+        return card1, card2, p_total
+
+def computer_cards():
+    c_card1 = draw_card()
+    c_total = c_card1
+    c_cards.append(c_card1)
+    print(f"Computer's first card: {c_card1}")
+    return c_total
+
+def game_start():
+    start = input("Do you want to play a game of Blackjack? Type 'y' or 'n' ")
+    if start == "y":
+        card1, card2, p_total = player_cards()
+        c_total = computer_cards()
+        while p_total <= 21:
+            hit = input("Type 'y' to get another card, type 'n' to pass")
+            if hit == "y":
+                new_card = draw_card()
+                p_total = p_total + new_card
+                p_cards.append(new_card)
+                print(f"Your cards: {p_cards}, current total: {p_total}")
+                card1, card2 = card1, new_card
+            elif hit == "n":
+                while c_total < 17:
+                    cnew_card = draw_card()
+                    c_total = c_total + cnew_card
+                    c_cards.append(cnew_card)
+                print(f"Dealer's cards: {c_cards}, current total: {c_total}")
+                if c_total > 21:
+                    print(f"You won! The dealer went over 21 with a total of {c_total}")
+                    game_start()
+                elif p_total > c_total:
+                    print(f"You won! You:{p_total}, Computer:{c_total}")
+                    game_start()
+                elif p_total == c_total:
+                    print(f"It was a draw! You:{p_total}, Computer:{c_total}")
+                    game_start()
+                elif p_total < c_total:
+                    print(f"You lost!You:{p_total}, Computer:{c_total}")
+                    game_start()
+            else:
+                print("Option not recognised")
+        if p_total >21:
+            print(f"You lost! You went over 21 with a total of {p_total}")
+    elif start == "n":
+        print(":(")
+    else:
+        print("Option not recognised")
+
+game_start()
+
+
+
